@@ -15,9 +15,9 @@ class CreateAppointmentForm extends Component
         return view('livewire.admin.appointments.create-appointment-form', compact('clients'));
     }
     public function createAppointment() {
-        $this->state['time'] = '00:00:00';
-        $this->state['status'] = 'Yah';
+        $this->state['status'] = 'open';
         Appointment::create($this->state);
         $this->dispatchBrowserEvent('alert',['message'=> 'Appointment created successfully']);
     }
 }
+ 

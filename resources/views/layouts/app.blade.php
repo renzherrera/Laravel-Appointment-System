@@ -16,6 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('backend/dist/css/adminlte.min.css')}}">
   <link rel="stylesheet" href="{{asset('backend/plugins/toastr/toastr.min.css')}}">
+  <link rel="stylesheet" href="{{asset('backend/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
 @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini">
@@ -59,9 +60,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset('backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('backend/dist/js/adminlte.min.js')}}"></script>
+<!--Moment JS-->
+<script type="text/javascript" src="{{asset('backend/plugins/moment/moment.min.js')}}"></script>
+
+<!--Date picker tempus -->
+<script type="text/javascript" src="{{asset('backend/plugins/toastr/toastr.min.js')}}"></script>
 
 <!--TOASTR-->
-<script type="text/javascript" src="{{asset('backend/plugins/toastr/toastr.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('backend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <script>
     $(document).ready(function(){
         toastr.options = {
@@ -94,6 +100,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
     })
 
         
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#appointmentDate').datetimepicker({
+            format: 'L',
+        });
+        $('#appointmentDate').on("change.datetimepicker",function(e){
+            let date = $(this).data('appointmentdate');
+            eval(date).set('state.date',$('#appointmentDateInput').val());
+        });
+    });
 </script>
 @livewireScripts
 </body>

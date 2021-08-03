@@ -63,9 +63,12 @@
 
                     </tbody>
                   </table>
+                  <div class="mt-2 d-flex justify-content-end">
+                    {{$users->links()}}
+                  </div>
                 </div>
               </div>
-              {{$users->links()}}
+              
     
              
               </div>

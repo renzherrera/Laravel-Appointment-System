@@ -2,19 +2,15 @@
 
 namespace App\Http\Livewire\Admin\Users;
 
+use App\Http\Livewire\Admin\AdminComponent;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-use Livewire\Component;
-use Livewire\WithPagination;
 
-class ListUsers extends Component
+class ListUsers extends AdminComponent
 {
     public $state = [];
 
     public $editMode = false , $user , $userIdBeingRemoved;
-    use WithPagination;
-    
-    
     public function render()
     {
         $users = User::paginate(5);
@@ -26,7 +22,6 @@ class ListUsers extends Component
     }
 
     public function createUser() {
-        $this->state = [];
 
        $validatedData =  Validator::make($this->state,[
             'name' => 'required',

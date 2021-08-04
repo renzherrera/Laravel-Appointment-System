@@ -52,23 +52,25 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($users as $user )
+                        @foreach ($appointments as $appointment )
                             
                       <tr>
-                        <th scope="row">{{$user->id}}</th>
-                        <td>{{$user->name}}</td>
-                        <td>{{$user->email}}</td>
+                        <th scope="row">{{$loop->iteration}}</th>
+                        <td>{{$appointment->client->name}}</td>
+                        <td>{{$appointment->date->toFormattedDate()}}</td>
+                        <td>{{$appointment->time->toFormattedTime()}}</td>
+                        <td><span class="badge badge-{{$appointment->status_badge}}">{{$appointment->status}}</span></td>
                         <td>
-                            <a href="" wire:click.prevent="edit({{ $user }})"><i class="fa fa-edit mr-2"></i></a>
-                            <a href="" wire:click.prevent="confirmUserRemoval({{ $user->id }})"><i class="fa fa-trash text-danger"></i></a>
+                            <a href="" wire:click.prevent="edit({{ $appointment }})"><i class="fa fa-edit mr-2"></i></a>
+                            <a href="" wire:click.prevent="confirmUserRemoval({{ $appointment->id }})"><i class="fa fa-trash text-danger"></i></a>
                         </td>
                       </tr>
-                      @endforeach --}}
+                      @endforeach
 
                     </tbody>
                   </table>
                   <div class="mt-2 d-flex justify-content-end">
-                    {{-- {{$users->links()}} --}}
+                    {{$appointments->links()}}
                   </div>
                 </div>
               </div>

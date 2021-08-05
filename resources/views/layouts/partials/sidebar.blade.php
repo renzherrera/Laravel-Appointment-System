@@ -10,10 +10,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('backend/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ auth()->user()->avatar_url }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Renz Gabriel Herrera</a>
+          <a href="#" class="d-block">{{auth()->user()->name}}</a>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
          <li class="nav-item">
             <a href="{{route('admin.dashboard')}}" class="nav-link {{request()->is('admin/dashboard') ? 'active' : ''}}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tachometer-alt  mr-3"></i>
               <p>
                 Dashboard
               </p>
@@ -32,7 +32,7 @@
           </li>    
           <li class="nav-item">
             <a href="{{route('admin.appointments')}}" class="nav-link {{request()->is('admin/appointments') ? 'active' : ''}}">
-              <i class="nav-icon fas fa-calendar-alt"></i>
+              <i class="nav-icon fas fa-calendar-alt mr-3"></i>
               <p>
                 Appointments
               </p>
@@ -40,7 +40,7 @@
           </li>   
           <li class="nav-item">
             <a href="{{route('admin.users')}}" class="nav-link {{request()->is('admin/users') ? 'active' : ''}}">
-              <i class="nav-icon fas fa-users"></i>
+              <i class="nav-icon fas fa-users mr-3"></i>
               <p>
                 Users
               </p>
@@ -48,19 +48,22 @@
           </li>   
           <li class="nav-item">
             <a href="{{route('admin.dashboard')}}" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tachometer-alt mr-3"></i>
               <p>
                 Settings
               </p>
             </a>
           </li>   
           <li class="nav-item">
-            <a href="{{route('admin.dashboard')}}" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Logout
-              </p>
-            </a>
+            <form method="POST" action="{{route('logout')}}">
+              @csrf
+                <a href="{{route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();" class="nav-link">
+                  <i class="nav-icon fas fa-tachometer-alt mr-3"></i>
+                  <p>
+                    Logout
+                  </p>
+                </a>
+            </form>
           </li>   
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->

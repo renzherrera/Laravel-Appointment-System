@@ -4,43 +4,48 @@ namespace App\Http\Livewire\Admin\Users;
 
 use App\Http\Livewire\Admin\AdminComponent;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Livewire\WithFileUploads;
 class ListUsers extends AdminComponent
 {
     public $state = [];
-
-    public $editMode = false , $user , $userIdBeingRemoved;
+    public $editMode = false , $user , $userIdBeingRemoved, $searchTerm = null,$photo;
+    use WithFileUploads;
     public function render()
     {
-        $users = User::paginate(5);
+        $users = User::query()
+        ->where('name','like','%'.$this->searchTerm.'%')
+        ->orWhere('email','like','%'.$this->searchTerm.'%')
+        ->orWhere('id', $this->searchTerm)
+        ->latest()->paginate(5);
         return view('livewire.admin.users.list-users',compact('users'));
     }
 
     public function addNew() {
+        $this->reset();
         $this->dispatchBrowserEvent('show-form');
     }
 
     public function createUser() {
-
        $validatedData =  Validator::make($this->state,[
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
         ])->validate();
-
         $validatedData['password'] = bcrypt($validatedData['password']);
-
+        if($this->photo) {
+             $validatedData['avatar'] = $this->photo->store('/','avatars');
+        }
         User::create($validatedData);
         // session()->flash('message','User added successfully');
         $this->dispatchBrowserEvent('hide-form', ['message' => 'User added successfully!']);
-
-
     }
-    
 
     public function edit (User $user)
     {
+        $this->reset();
+
         $this->editMode = true;
         // $this->state['name'] = $user->name;
         // $this->state['email'] = $user->email;
@@ -59,7 +64,15 @@ class ListUsers extends AdminComponent
         if(!empty($validatedData['password'])){
         $validatedData['password'] = bcrypt($validatedData['password']);
         }
-       $this->user->update($validatedData);
+        if($this->photo) {
+            $validatedData['avatar'] = $this->photo->store('/','avatars');
+            if (Storage::disk('avatars')->exists($this->state['avatar'])) {
+                 // unlink("storage/avatars/".$this->state['avatar']);
+                 Storage::disk('avatars')->delete($this->state['avatar']);
+            }
+        }
+        
+        $this->user->update($validatedData);
         // session()->flash('message','User added successfully');
         $this->dispatchBrowserEvent('hide-form', ['message' => 'User updated successfully!']);
         $this->state = [];

@@ -1,4 +1,7 @@
 <div>
+   <!-- Loader -->
+   <x-page-loading-indicator></x-page-loading-indicator>
+   <!-- end of loader -->
     <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
@@ -14,52 +17,54 @@
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
       </div>
-   
 
-      <div class="content">
+      <div class="content m-3">
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-12">
-                <div class="d-flex justify-content-end mb-2">
+                <div class="d-flex justify-content-between mb-2">
                     <button class="btn btn-primary" wire:click.prevent="addNew"><i class="fa fa-plus-circle mr-1"></i> Add New User</button>
-                </div>
+                      <x-search-input wire:model="searchTerm"> </x-search-input>
+                
+              </div>
 
-                <!-- Bootstrap Alert -->
-                {{-- @if (session()->has('message'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-check-circle mr-1"></i>{{session('message')}}</strong> 
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  @endif --}}
-
-
-              <div class="card">
-                <div class="card-body">
+              <div class="card table-responsive" >
+                <div class="card-body ">
                   <h5 class="card-title">Card title</h5>
-                  <table class="table table-hover">
+                  <table class="table  text-md ">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Options</th>
+                        <th scope="col" class="text-center">Options</th>
                       </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($users as $user )
-                            
-                      <tr>
-                        <th scope="row">{{$user->id}}</th>
-                        <td>{{$user->name}}</td>
-                        <td>{{$user->email}}</td>
-                        <td>
-                            <a href="" wire:click.prevent="edit({{ $user }})"><i class="fa fa-edit mr-2"></i></a>
-                            <a href="" wire:click.prevent="confirmUserRemoval({{ $user->id }})"><i class="fa fa-trash text-danger"></i></a>
-                        </td>
+                    <tbody class="" wire:loading.remove wire:target="searchTerm">
+                      @forelse ($users as $user )
+                        <tr class="">
+                          <th scope="row">{{$loop->iteration}}</th>
+                          <td class="p-1">
+                            <div class="" style="width: 42px; height:42px; overflow:hidden; border-radius:50%">
+                               <img style="position: relative; height: 100%; margin:auto;" src="{{$user->avatar_url}}" alt="">
+                            </div>
+                          </td>
+                          <td>{{ucwords($user->name)}}</td>
+                          <td>{{$user->email}}</td>
+                          <td class="text-center">
+                              <a href="" wire:click.prevent="edit({{ $user }})"><i class="fa fa-edit mr-3"></i></a>
+                              <a href="" wire:click.prevent="confirmUserRemoval({{ $user->id }})"><i class="fa fa-trash text-danger"></i></a>
+                          </td>
+                        </tr>
+                      @empty
+                        <tr>
+                          <td colspan="100%" class="text-center">
+                            <img style="width:190px;" src="{{asset('backend/dist/img/svg/noData.svg')}}" alt="No data image / svg" class="mb-5 mt-4">
+                            <h4>No results found, Try different keywords.</h4>
+                          </td>
                       </tr>
-                      @endforeach
+                      @endforelse
 
                     </tbody>
                   </table>
@@ -128,7 +133,48 @@
                     <label for="passwordConfirmation">Confirm Password</label>
                     <input wire:model.defer="state.password_confirmation"  type="password" class="form-control @error('passwordConfirmation')  is-invalid @enderror" id="passwordConfirmation" placeholder="Confirm Password" >
                 </div>
-             
+
+                <div class="form-group">
+                  <label for="customFile">Profile Photo:</label>
+                  
+                    <div class="custom-file">
+                      <div x-data="{ isUploading: false,progress:3 }" 
+                      x-on:livewire-upload-start="isUploading = true"
+                      x-on:livewire-upload-finish="isUploading = false;progress = 5"
+                      x-on:livewire-upload-error="isUploading = false"
+                      x-on:livewire-upload-progress="progress = $event.detail.progress"
+
+                      >
+                          <input wire:model.defer = "photo" type="file" class="custom-file-input" id="customFile">
+                        
+                          <div x-show.transition="isUploading" class="progress progress-sm active mt-2 rounded">
+                            <div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="20"
+                            aria-valuemin="0" aria-valuemax="100" x-bind:style="`width: ${progress}%`">
+                              <span class="sr-only">20% Complete</span>
+                            </div>  
+                          </div>
+                      </div>
+
+                      
+                      <label class="custom-file-label" for="customFile">
+                        @if ($photo)
+                          {{$photo->getClientOriginalName()}}
+                        @else
+                        Choose an Image
+                        @endif
+                      </label>
+                    </div>
+
+                    <div class="img mt-2" style="width: 150px; height:150px; overflow:hidden;">
+                      @if ($photo)
+                        <img src="{{ $photo->temporaryUrl() }}" alt="" class="" style="margin: auto; position: relative; width: 100%; height: auto;" class=" ">
+                      @else
+                        <img src="{{$state['avatar_url'] ?? ''}}" alt="" style="margin: auto; position: relative; width: 100%; height: auto;">
+                      @endif
+                       </div>
+
+
+                </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2"></i> Cancel</button>

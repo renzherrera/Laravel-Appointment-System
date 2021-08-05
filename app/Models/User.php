@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**
@@ -43,4 +44,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //to activate avatar_url
+    protected $appends = [
+        'avatar_url'
+    ];
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar && asset("storage/avatars/". $this->avatar)){
+           return asset("storage/avatars/". $this->avatar);
+        }
+        return asset('noimage.png');
+    }
 }

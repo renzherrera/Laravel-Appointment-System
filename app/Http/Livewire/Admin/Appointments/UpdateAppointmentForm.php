@@ -25,6 +25,7 @@ class UpdateAppointmentForm extends Component
         Validator::make($this->state, [
             'client_id' => 'required',
             'date' => 'required',
+            'members' => 'required',
             'time' => 'required',
             'note' => 'nullable',
             'status' => 'required|in:CLOSED,SCHEDULED',

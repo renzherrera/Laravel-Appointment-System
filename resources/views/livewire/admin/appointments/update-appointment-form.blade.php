@@ -105,6 +105,22 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Select Team Members</label>
+                                            <x-inputs.select2 wire:model.defer="state.members" placeholder="Select Members" id="members">
+                                                <option >Alabama</option>
+                                                <option >Alaska</option>
+                                                <option >California</option>
+                                                <option >Delaware</option>
+                                                <option >Tennessee</option>
+                                                <option >Texas</option>
+                                                <option >Washington</option>
+                                            </x-inputs.select2>
+                                          </div>
+                                    </div> 
+
                                 </div>
 
                             </div>
@@ -123,6 +139,8 @@
     @push('js')
     
     <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
+    
+    
     <script>
         ClassicEditor
                 .create( document.querySelector( '#note' ) )

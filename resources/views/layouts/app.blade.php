@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Laravel Appointment</title>
+  <title>{{setting('site_name')}}</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -21,11 +21,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{asset('backend/plugins/sweetalert2/sweetalert2.min.css')}}">
   <!-- Checkboxes Styles -->
   <link rel="stylesheet" href="{{asset('backend/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-
+<!-- Error validation -->
+  <style>
+    .custom-error .select2-selecton{
+        border:none;
+    }
+  </style>
 @livewireStyles
 @stack('styles')
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini {{setting('sidebar_collapse') ? 'sidebar-collapse' : ''}}">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -76,6 +81,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- Alpine JS -->
 <script src="//unpkg.com/alpinejs" defer></script>
+
+
+
+
 <script>
   const SwalModal = (icon, title, html) => {
       Swal.fire({

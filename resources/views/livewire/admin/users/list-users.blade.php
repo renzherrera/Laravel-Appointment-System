@@ -10,7 +10,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
                 <li class="breadcrumb-item active">Users</li>
               </ol>
             </div><!-- /.col -->
@@ -30,7 +30,6 @@
 
               <div class="card table-responsive" >
                 <div class="card-body ">
-                  <h5 class="card-title">Card title</h5>
                   <table class="table  text-md ">
                     <thead>
                       <tr>
@@ -38,6 +37,7 @@
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Role</th>
                         <th scope="col" class="text-center">Options</th>
                       </tr>
                     </thead>
@@ -52,6 +52,12 @@
                           </td>
                           <td>{{ucwords($user->name)}}</td>
                           <td>{{$user->email}}</td>
+                          <td>
+                            <select class="form-control" wire:change ="changeRole({{ $user }},$event.target.value)">
+                              <option value="user" {{$user->role == 'user' ? 'selected' : ''}}>User</option>
+                              <option value="admin" {{$user->role == 'admin' ? 'selected' : ''}}>Admin</option>
+                            </select>
+                          </td>
                           <td class="text-center">
                               <a href="" wire:click.prevent="edit({{ $user }})"><i class="fa fa-edit mr-3"></i></a>
                               <a href="" wire:click.prevent="confirmUserRemoval({{ $user->id }})"><i class="fa fa-trash text-danger"></i></a>

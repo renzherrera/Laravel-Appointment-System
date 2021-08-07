@@ -6,6 +6,7 @@ use App\Http\Livewire\Admin\AdminComponent;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
 class ListUsers extends AdminComponent
 {
@@ -89,6 +90,17 @@ class ListUsers extends AdminComponent
         $user =  User::findOrFail($this->userIdBeingRemoved);
         $user->delete();
         $this->dispatchBrowserEvent('hide-delete-modal', ['message' => 'User deleted successfully!']);
+
+    }
+
+    public function changeRole(User $user, $role) {
+        Validator::make(['role' => $role], [
+            'role' => 'required',
+            Rule::in(User::ROLE_ADMIN, User::ROLE_USER),
+        ])->validate();
+        $user->update(['role' => $role]);
+        $capsRole = ucwords($role);
+        $this->dispatchBrowserEvent('updated', ['message' => "Role successfully updated to {$capsRole}!"]);
 
     }
    

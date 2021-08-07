@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Appointments;
 
+use App\Exports\AppointmentsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Livewire\Admin\AdminComponent;
 use App\Models\Appointment;
+
 
 class ListAppointments extends AdminComponent
 {
@@ -75,7 +78,6 @@ class ListAppointments extends AdminComponent
     public function deleteSelectedRows() {
 
         Appointment::whereIn('id',$this->selectedRows)->delete();
-
         $this->dispatchBrowserEvent('deleted',['message' => 'Selected Appointment successfully deleted!']);
         $this->reset(['selectPageRows','selectedRows']);
 
@@ -85,17 +87,18 @@ class ListAppointments extends AdminComponent
         Appointment::whereIn('id',$this->selectedRows)->update(['status'=> 'SCHEDULED']);
         $this->dispatchBrowserEvent('updated',['message' => 'Selected appointment successfully updated!']);
         $this->reset(['selectPageRows','selectedRows']);
-
     }
     public function markAllAsClosed() {
 
         Appointment::whereIn('id', $this->selectedRows)->update(['status' => 'CLOSED']);
-
 		$this->dispatchBrowserEvent('updated', ['message' => 'Selected appointments marked as closed.']);
-
 		$this->reset(['selectPageRows', 'selectedRows']);
 
     }
 
+    public function export() 
+    {
+        return (new AppointmentsExport($this->selectedRows))->download('appointments.xls');
+    }
 
 }

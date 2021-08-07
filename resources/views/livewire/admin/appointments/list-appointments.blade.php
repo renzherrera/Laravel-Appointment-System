@@ -42,6 +42,7 @@
                             <a class="dropdown-item" wire:click.prevent = "deleteSelectedRows" href="#">Delete Selected</a>
                             <a class="dropdown-item" wire:click.prevent = "markAllAsScheduled" href="#">Mark as Scheduled</a>
                             <a class="dropdown-item" wire:click.prevent = "markAllAsClosed" href="#">Mark as Closed</a>
+                            <a class="dropdown-item" wire:click.prevent = "export" href="#">Export</a>
                           </div>
                       </div>
                       @endif
@@ -80,8 +81,7 @@
 
               <div class="card">
                 <div class="card-body">
-                  <div class="card-header"></div>
-                  <table class="table table-hover">
+                  <table class="table table-hover" id="appointmentTable">
                     <thead>
                       <tr>
                         <th>
@@ -102,7 +102,8 @@
                         @foreach ($appointments as $appointment )
                             
                       <tr>
-                        <th scope="row"><div class="icheck-primary d-inline ml-2">
+                        <th style="width:10px;" scope="row">
+                          <div class="icheck-primary d-inline ">
                           <input type="checkbox" wire:model = "selectedRows" value="{{ $appointment->id }}" name="todo2" id="{{$appointment->id}}">
                           <label for="{{$appointment->id}}"></label>
                         </div></th>
@@ -137,6 +138,17 @@
 
         <!--Sweet alert confirm component located at components folder-->
         <x-confirmation-alert> </x-confirmation-alert>
+     @push('js')
+        <script>
+          $('#appointmentTable tr td').on("DOMSubtreeModified", function(){
+            alert('changed');
+          });
+            // $('#yesclick').on('change', function(){
+            //     alert('aw');
+            // });
+        </script>
+    @endpush
+        
   </div>
 
 

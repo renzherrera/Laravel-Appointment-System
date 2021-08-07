@@ -25,6 +25,29 @@
       })
   })
 
+  window.addEventListener('change-role-confirmation', event=> {
+      Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Livewire.emit('changeRole')
+        }
+       else {
+        Swal.fire(
+          'Cancelled',
+          'Your imaginary file is safe :)',
+          'error'
+        )
+      }
+      })
+  })
+
   window.addEventListener('show-delete-selected-confirmation', event=> {
       Swal.fire({
       title: 'All selected rows will be deleted. Proceed?',

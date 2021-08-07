@@ -18,11 +18,13 @@ class CreateAppointmentForm extends Component
         return view('livewire.admin.appointments.create-appointment-form', compact('clients'));
     }
     public function createAppointment() {
+
         Validator::make($this->state, [
             'client_id' => 'required',
             'date' => 'required',
             'time' => 'required',
             'note' => 'nullable',
+            'members' => 'required',
             'status' => 'required|in:CLOSED,SCHEDULED',
         ],
         [

@@ -105,6 +105,44 @@
                                             @enderror
                                         </div>
                                     </div>
+
+                                   {{-- <div class="col-md-6">
+                                        <div class="form-group"  wire:ignore>
+                                            <label>Select Team Members</label>
+                                            <x-inputs.select2 wire:model="state.others" placeholder="Select Location" id="others">
+                                                <option>Alabama</option>
+                                                <option>Alaska</option>
+                                                <option>California</option>
+                                                <option>Delaware</option>
+                                                <option>Tennessee</option>
+                                                <option>Texas</option>
+                                                <option>Washington</option>
+                                            </x-inputs.select2>
+                                        </div>
+                                    </div>  --}}
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Select Team Members</label>
+                                            <div class="@error('members') is-invalid border border-danger rounded custom-error @enderror">
+                                                <x-inputs.select2 wire:model.defer="state.members" placeholder="Select Members" id="members">
+                                                    <option >Alabama</option>
+                                                    <option >Alaska</option>
+                                                    <option >California</option>
+                                                    <option >Delaware</option>
+                                                    <option >Tennessee</option>
+                                                    <option >Texas</option>
+                                                    <option >Washington</option>
+                                                </x-inputs.select2>
+                                            </div>
+                                            @error('members')
+                                            <div class="invalid-feedback">
+                                                {{$message}}
+                                            </div>
+                                            @enderror
+                                          </div>
+                                    </div> 
+                                    
                                 </div>
 
                             </div>
@@ -121,26 +159,19 @@
         </div>
     </div>
     @push('js')
-    
     <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
     <script>
-        ClassicEditor
-                .create( document.querySelector( '#note' ) )
-                .then( editor => {
-                //     editor.model.document.on('change:data',() =>{
-                //         let note = $('#note').data('note');
-                //         console.log(note);
-                // eval(note).set('state.note',editor.getData());
-    
-                //     })
-                    document.getElementById('submit').addEventListener('click',() => {
-                        let note = $('#note').data('note');
-                eval(note).set('state.note',editor.getData());
-                    })
-                } )
-                .catch( error => {
-                        console.error( error );
-                } );
+        ClassicEditor.create( document.querySelector( '#note' ) );
+        $('form').submit(function(){
+          @this.set('state.members', $('#members').val());
+          @this.set('state.note', $('#note').val());
+
+        })
     </script>
+    
+    @endpush
+
+    @push('styles')
+        
     @endpush
 </div>
